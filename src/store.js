@@ -6,7 +6,7 @@ import cartReducer from "./features/cart/cartSlice";
 const store = configureStore({
   reducer: {
     user: userReducer,
-    cartReducer: cartReducer,
+    cart: cartReducer,
   },
 });
 
