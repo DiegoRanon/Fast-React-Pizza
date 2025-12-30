@@ -8,6 +8,7 @@ import store from "../../store";
 import { formatCurrency } from "../../utils/helpers";
 import { useState } from "react";
 import { fetchAddress } from "../user/userSlice";
+import { addSessionOrder } from "../../utils/sessionOrders";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -40,7 +41,9 @@ function CreateOrder() {
 
   return (
     <div className="py-6 px-4">
-      <h2 className="text-xl font-semibold mb-8">Ready to order? Let's go!</h2>
+      <h2 className="text-xl font-semibold mb-8">
+        Ready to order? Let&apos;s go!
+      </h2>
 
       <Form method="POST">
         <div className="mb-5 flex gap-2 flex-col sm:flex-row sm:items-center">
@@ -112,7 +115,7 @@ function CreateOrder() {
             onChange={(e) => setWithPriority(e.target.checked)}
           />
           <label htmlFor="priority" className="font-medium">
-            Want to yo give your order priority?
+            Want to give your order priority?
           </label>
         </div>
 
@@ -156,6 +159,9 @@ export async function action({ request }) {
   if (Object.keys(errors).length > 0) return errors;
 
   const newOrder = await createOrder(order);
+
+  // Store in this users session (no DB)
+  addSessionOrder(newOrder);
 
   // DO NOT OVERUSE
   store.dispatch(clearCart());
